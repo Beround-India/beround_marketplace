@@ -2,5 +2,5 @@
 .DS_Store
 Thumbs.db
 
-# Local overrides (if anyone ever adds them)
+# Local overrides
 *.local

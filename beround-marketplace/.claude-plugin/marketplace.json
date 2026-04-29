@@ -1,0 +1,31 @@
+{
+  "$schema": "https://claude.ai/schemas/marketplace/v1.json",
+  "name": "Beround Internal Marketplace",
+  "description": "Private plugin catalog for Beround employees. Internal use only.",
+  "organization": "Beround",
+  "contact": "security@beround.nl",
+  "plugins": [
+    {
+      "id": "beround-security",
+      "name": "Beround Security Hardening",
+      "version": "0.1.0",
+      "description": "Security hardening suite for Claude Code. Installs 10 protective hooks and sync/scan/research skills. Required for all Beround Claude Code users.",
+      "author": "Beround Security Team",
+      "category": "security",
+      "tags": [
+        "security",
+        "hooks",
+        "compliance",
+        "internal"
+      ],
+      "required": true,
+      "plugin_path": "beround-security",
+      "min_claude_code_version": "1.0.0",
+      "platforms": [
+        "darwin",
+        "win32"
+      ],
+      "install_notes": "Requires Git Bash on Windows. On first install, /security-sync runs automatically to fetch latest signatures from GitHub repo claude-security-signatures."
+    }
+  ]
+}
