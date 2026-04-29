@@ -1,24 +1,74 @@
 {
   "name": "beround-security",
   "version": "0.1.0",
-  "description": "Security hardening suite for Claude Code - Beround internal use only.",
+  "description": "Security hardening suite for Claude Code \u2014 Beround internal use only.",
   "author": "Beround Security Team",
   "hooks": [
-    {"file": "hooks/01-destructive-command-guard.sh", "name": "Destructive Command Guard", "event": "pre_tool_call"},
-    {"file": "hooks/02-package-denylist.sh", "name": "Package Denylist", "event": "pre_tool_call"},
-    {"file": "hooks/03-hallucinated-package-detector.sh", "name": "Hallucinated Package Detector", "event": "pre_tool_call"},
-    {"file": "hooks/04-data-exfiltration-guard.sh", "name": "Data Exfiltration Guard", "event": "pre_tool_call"},
-    {"file": "hooks/05-mcp-prompt-injection-detector.sh", "name": "MCP Prompt Injection Detector", "event": "post_tool_result"},
-    {"file": "hooks/06-sensitive-file-protection.sh", "name": "Sensitive File Protection", "event": "pre_tool_call"},
-    {"file": "hooks/07-env-var-exfiltration-guard.sh", "name": "Env Var Exfiltration Guard", "event": "pre_tool_call"},
-    {"file": "hooks/08-git-safety-guard.sh", "name": "Git Safety Guard", "event": "pre_tool_call"},
-    {"file": "hooks/09-executable-creation-guard.sh", "name": "Executable Creation Guard", "event": "pre_tool_call", "action": "warn"},
-    {"file": "hooks/10-package-policy-enforcer.sh", "name": "Package Policy Enforcer", "event": "pre_tool_call"}
+    {
+      "file": "hooks/01-destructive-command-guard.sh",
+      "name": "Destructive Command Guard",
+      "event": "pre_tool_call"
+    },
+    {
+      "file": "hooks/02-package-denylist.sh",
+      "name": "Package Denylist",
+      "event": "pre_tool_call"
+    },
+    {
+      "file": "hooks/03-hallucinated-package-detector.sh",
+      "name": "Hallucinated Package Detector",
+      "event": "pre_tool_call"
+    },
+    {
+      "file": "hooks/04-data-exfiltration-guard.sh",
+      "name": "Data Exfiltration Guard",
+      "event": "pre_tool_call"
+    },
+    {
+      "file": "hooks/05-mcp-prompt-injection-detector.sh",
+      "name": "MCP Prompt Injection Detector",
+      "event": "post_tool_result"
+    },
+    {
+      "file": "hooks/06-sensitive-file-protection.sh",
+      "name": "Sensitive File Protection",
+      "event": "pre_tool_call"
+    },
+    {
+      "file": "hooks/07-env-var-exfiltration-guard.sh",
+      "name": "Env Var Exfiltration Guard",
+      "event": "pre_tool_call"
+    },
+    {
+      "file": "hooks/08-git-safety-guard.sh",
+      "name": "Git Safety Guard",
+      "event": "pre_tool_call"
+    },
+    {
+      "file": "hooks/09-executable-creation-guard.sh",
+      "name": "Executable Creation Guard",
+      "event": "pre_tool_call",
+      "action": "warn"
+    },
+    {
+      "file": "hooks/10-package-policy-enforcer.sh",
+      "name": "Package Policy Enforcer",
+      "event": "pre_tool_call"
+    }
   ],
   "skills": [
-    {"directory": "skills/security-sync", "trigger": "/security-sync"},
-    {"directory": "skills/security-scan", "trigger": "/security-scan"},
-    {"directory": "skills/security-research", "trigger": "/security-research"}
+    {
+      "directory": "skills/security-sync",
+      "trigger": "/security-sync"
+    },
+    {
+      "directory": "skills/security-scan",
+      "trigger": "/security-scan"
+    },
+    {
+      "directory": "skills/security-research",
+      "trigger": "/security-research"
+    }
   ],
   "settings_template": "settings-template.json",
   "on_install": "skills/security-sync/SKILL.md"

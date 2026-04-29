@@ -11,8 +11,23 @@
       "id": "beround-security",
       "name": "Beround Security Hardening",
       "version": "0.1.0",
-      "description": "Security hardening suite for Claude Code.",
-      "path": "beround-security"
+      "description": "Security hardening suite for Claude Code. Installs 10 protective hooks and sync/scan/research skills. Required for all Beround Claude Code users.",
+      "author": "Beround Security Team",
+      "category": "security",
+      "tags": [
+        "security",
+        "hooks",
+        "compliance",
+        "internal"
+      ],
+      "required": true,
+      "path": "beround-security",
+      "min_claude_code_version": "1.0.0",
+      "platforms": [
+        "darwin",
+        "win32"
+      ],
+      "install_notes": "Requires Git Bash on Windows. On first install, /security-sync runs automatically to fetch latest signatures from GitHub repo claude-security-signatures."
     }
   ]
 }
