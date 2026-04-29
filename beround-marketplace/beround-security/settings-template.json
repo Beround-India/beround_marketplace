@@ -1,0 +1,18 @@
+{
+  "beround_security": {
+    "signatures_dir": "${HOME}/.claude/beround-security/signatures",
+    "remote_type": "github",
+    "signatures_github_owner": "YOUR_GITHUB_ORG_OR_USERNAME",
+    "signatures_github_repo": "claude-security-signatures",
+    "signatures_github_branch": "main",
+    "signatures_ado_org": "Beround",
+    "signatures_ado_project": "Beround Security",
+    "signatures_ado_repo": "claude-security-signatures",
+    "auto_sync_if_older_than_hours": 24,
+    "scan_on_session_start": true,
+    "notify_on_findings": true
+  },
+  "hooks": {
+    "enabled": true
+  }
+}
