@@ -1,9 +1,11 @@
 {
   "$schema": "https://claude.ai/schemas/marketplace/v1.json",
-  "name": "Beround Internal Marketplace",
+  "name": "beround-internal-marketplace",
   "description": "Private plugin catalog for Beround employees. Internal use only.",
-  "organization": "Beround",
-  "contact": "security@beround.nl",
+  "owner": {
+    "name": "Beround",
+    "contact": "security@beround.nl"
+  },
   "plugins": [
     {
       "id": "beround-security",
