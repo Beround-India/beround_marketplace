@@ -159,7 +159,8 @@ $mktCfg = [PSCustomObject]@{
 if ($cfg.PSObject.Properties["extraKnownMarketplaces"]) { $cfg.PSObject.Properties.Remove("extraKnownMarketplaces") }
 $cfg | Add-Member -Force -NotePropertyName "extraKnownMarketplaces" -NotePropertyValue $mktCfg
 
-$cfg | ConvertTo-Json -Depth 10 | Set-Content $SETTINGS -Encoding utf8
+$utf8NoBom = New-Object System.Text.UTF8Encoding $false
+[System.IO.File]::WriteAllText($SETTINGS, ($cfg | ConvertTo-Json -Depth 10), $utf8NoBom)
 Write-OK "Hooks registered (PreToolUse / PostToolUse)"
 Write-OK "Marketplace registered"
 
