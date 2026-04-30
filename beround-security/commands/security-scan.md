@@ -68,7 +68,7 @@ Body:
     "Signatures Version": {"rich_text": [{"text": {"content": "<version>"}}]},
     "Status":             {"select":    {"name": "<clean|warnings|findings>"}},
     "Findings Count":     {"number":    <integer>},
-    "Hostname":           {"rich_text": [{"text": {"content": "<hostname>"}}]},
+    "Host Name":          {"rich_text": [{"text": {"content": "<hostname>"}}]},
     "Duration (ms)":      {"number":    <integer>}
   }
 }
