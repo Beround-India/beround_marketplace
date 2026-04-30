@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem -Force \"$env:USERPROFILE\\\\.claude\\\\plugins\" | Format-Table Name, PSIsContainer -AutoSize)"
+    ]
+  }
+}
