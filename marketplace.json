@@ -1,0 +1,18 @@
+{
+  "$schema": "https://claude.ai/schemas/marketplace/v1.json",
+  "name": "beround-internal-marketplace",
+  "description": "Private plugin catalog for Beround employees. Internal use only.",
+  "owner": {
+    "name": "Beround",
+    "contact": "security@beround.nl"
+  },
+  "plugins": [
+    {
+      "id": "beround-security",
+      "name": "Beround Security Hardening",
+      "version": "0.1.0",
+      "description": "Security hardening suite for Claude Code.",
+      "path": "beround-security"
+    }
+  ]
+}
