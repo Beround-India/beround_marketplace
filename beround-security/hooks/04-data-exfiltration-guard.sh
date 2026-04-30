@@ -13,7 +13,7 @@ for domain in "${ALWAYS_BLOCKED[@]}"; do
 done
 
 if echo "$TOOL_INPUT" | grep -qE "https?://"; then
-  DOMAIN=$(echo "$TOOL_INPUT" | grep -oE "https?://[^/" ]+" | head -1)
+  DOMAIN=$(echo "$TOOL_INPUT" | grep -oE 'https?://[^/ "]+' | head -1)
   echo "BEROUND SECURITY [HOOK 04]: WARNING — outbound request to '$DOMAIN'. Verify this is intentional." >&2
 fi
 exit 0
