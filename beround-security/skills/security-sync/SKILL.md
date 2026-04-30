@@ -14,13 +14,15 @@ Also auto-triggered by security-scan if local signatures are older than 24 hours
 #!/usr/bin/env bash
 set -euo pipefail
 
-GITHUB_BASE="https://raw.githubusercontent.com/Beround-India/beround_security/main"
+# Load PAT from config (Windows-safe path handling)
+GITHUB_PAT=$(python3 -c "import json,os; p=os.environ.get('USERPROFILE',os.path.expanduser('~')).replace(chr(92),'/'); print(json.load(open(p+'/.claude/plugins/beround-security/config/github.json'))['pat'])")
+GITHUB_BASE="https://raw.githubusercontent.com/Beround-India/beround_security/main/claude-security-signatures"
 SIG_DIR="${BEROUND_SIGNATURES_DIR:-$HOME/.claude/beround-security/signatures}"
 
 mkdir -p "$SIG_DIR"
 
 # Fetch remote version.json
-REMOTE_VERSION_JSON=$(curl -sf "$GITHUB_BASE/version.json" || true)
+REMOTE_VERSION_JSON=$(curl -sf -H "Authorization: token $GITHUB_PAT" "$GITHUB_BASE/version.json" || true)
 if [ -z "$REMOTE_VERSION_JSON" ]; then
   echo "BEROUND SECURITY [SYNC]: WARNING — could not reach GitHub. Using cached signatures." >&2
   exit 0
@@ -48,7 +50,7 @@ FILES=(
 
 for FILE in "${FILES[@]}"; do
   FILENAME=$(basename "$FILE")
-  CONTENT=$(curl -sf "$GITHUB_BASE/$FILE" || true)
+  CONTENT=$(curl -sf -H "Authorization: token $GITHUB_PAT" "$GITHUB_BASE/$FILE" || true)
   if [ -z "$CONTENT" ]; then
     echo "BEROUND SECURITY [SYNC]: ERROR — failed to fetch $FILENAME. Aborting." >&2
     exit 1

@@ -1,0 +1,8 @@
+{
+  "_comment": "Admin-managed. Read-only PAT for beround_security signatures repo. Repo is private so this is safe. Do not share outside the private marketplace repo.",
+  "pat": "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",
+  "owner": "Beround-India",
+  "repo": "beround_security",
+  "branch": "main",
+  "signatures_path": "claude-security-signatures"
+}
