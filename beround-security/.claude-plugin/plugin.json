@@ -20,6 +20,11 @@
     {"directory": "skills/security-scan", "trigger": "/security-scan"},
     {"directory": "skills/security-research", "trigger": "/security-research"}
   ],
+  "commands": [
+    {"file": "commands/security-sync.md", "trigger": "/security-sync"},
+    {"file": "commands/security-scan.md", "trigger": "/security-scan"},
+    {"file": "commands/security-research.md", "trigger": "/security-research"}
+  ],
   "settings_template": "settings-template.json",
-  "on_install": "skills/security-sync/SKILL.md"
+  "on_install": "commands/security-sync.md"
 }
