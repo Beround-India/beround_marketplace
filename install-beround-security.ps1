@@ -112,7 +112,7 @@ Write-Step "4/5" "Updating Claude Code settings..."
 # Load existing settings or start fresh
 if (Test-Path $SETTINGS) {
     try   { $cfg = Get-Content $SETTINGS -Raw | ConvertFrom-Json }
-    catch { Write-Warn "Could not parse existing settings.json — creating fresh copy."; $cfg = [PSCustomObject]@{} }
+    catch { Write-Warn "Could not parse existing settings.json - creating fresh copy."; $cfg = [PSCustomObject]@{} }
 } else {
     New-Item -ItemType Directory -Force -Path $CLAUDE_DIR | Out-Null
     $cfg = [PSCustomObject]@{}
