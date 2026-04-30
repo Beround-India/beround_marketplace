@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://claude.ai/schemas/marketplace/v1.json",
   "name": "beround-internal-marketplace",
   "description": "Private plugin catalog for Beround employees. Internal use only.",
