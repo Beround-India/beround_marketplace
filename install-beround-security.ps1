@@ -1,7 +1,7 @@
 # =============================================================================
-# Beround Security Hardening — Claude Code Install Script (Windows)
+# Beround Security Hardening - Claude Code Install Script (Windows)
 # Installs to ~/.claude/ which is shared by Claude Code CLI, Desktop App,
-# and the VS Code extension — one install covers all surfaces.
+# and the VS Code extension - one install covers all surfaces.
 #
 # Usage:
 #   git clone https://github.com/Beround-India/beround_marketplace.git "$env:TEMP\bm"
@@ -32,7 +32,7 @@ Write-Host "   Works in:    Claude Code CLI / Desktop / VS Code"
 Write-Host "================================================" -ForegroundColor Cyan
 
 # =============================================================================
-# STEP 1 — Prerequisites
+# STEP 1 - Prerequisites
 # =============================================================================
 Write-Step "1/5" "Checking prerequisites..."
 
@@ -42,7 +42,7 @@ $prereqFail = $false
 try   { $v = git --version 2>&1; Write-OK "git found ($v)" }
 catch { Write-Fail "git not found. Install from https://git-scm.com"; $prereqFail = $true }
 
-# Bash (Git Bash — needed for hooks to run)
+# Bash (Git Bash - needed for hooks to run)
 try   { $v = bash --version 2>&1 | Select-Object -First 1; Write-OK "bash found ($v)" }
 catch { Write-Fail "bash not found. Install Git for Windows (includes Git Bash): https://git-scm.com"; $prereqFail = $true }
 
@@ -62,7 +62,7 @@ if ($prereqFail) {
 }
 
 # =============================================================================
-# STEP 2 — Clone plugin files
+# STEP 2 - Clone plugin files
 # =============================================================================
 Write-Step "2/5" "Installing plugin files..."
 
@@ -88,7 +88,7 @@ try {
 }
 
 # =============================================================================
-# STEP 3 — Register slash commands
+# STEP 3 - Register slash commands
 # =============================================================================
 Write-Step "3/5" "Registering slash commands..."
 
@@ -100,12 +100,12 @@ foreach ($cmd in @("security-sync", "security-scan", "security-research")) {
         Copy-Item $src "$CMD_DIR\$cmd.md" -Force
         Write-OK "/$cmd"
     } else {
-        Write-Warn "/$cmd — source file not found, skipping"
+        Write-Warn "/$cmd - source file not found, skipping"
     }
 }
 
 # =============================================================================
-# STEP 4 — Write Claude Code settings
+# STEP 4 - Write Claude Code settings
 # =============================================================================
 Write-Step "4/5" "Updating Claude Code settings..."
 
@@ -118,7 +118,7 @@ if (Test-Path $SETTINGS) {
     $cfg = [PSCustomObject]@{}
 }
 
-# Hook paths — forward slashes required by bash on Windows
+# Hook paths - forward slashes required by bash on Windows
 $hp = "$PLUGIN_DIR".Replace("\", "/")
 
 # PreToolUse: all 9 guard hooks in one matcher
@@ -164,7 +164,7 @@ Write-OK "Hooks registered (PreToolUse / PostToolUse)"
 Write-OK "Marketplace registered"
 
 # =============================================================================
-# STEP 5 — First signature sync
+# STEP 5 - First signature sync
 # =============================================================================
 Write-Step "5/5" "Syncing threat signatures..."
 
