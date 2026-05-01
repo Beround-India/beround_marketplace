@@ -157,6 +157,8 @@ $mktCfg = [PSCustomObject]@{
 }
 if ($cfg.PSObject.Properties["extraKnownMarketplaces"]) { $cfg.PSObject.Properties.Remove("extraKnownMarketplaces") }
 $cfg | Add-Member -Force -NotePropertyName "extraKnownMarketplaces" -NotePropertyValue $mktCfg
+if ($cfg.PSObject.Properties["enabledMcpjsonServers"]) { $cfg.PSObject.Properties.Remove("enabledMcpjsonServers") }
+$cfg | Add-Member -Force -NotePropertyName "enabledMcpjsonServers" -NotePropertyValue @("azure-devops")
 
 $utf8NoBom = New-Object System.Text.UTF8Encoding $false
 [System.IO.File]::WriteAllText($SETTINGS, ($cfg | ConvertTo-Json -Depth 10), $utf8NoBom)
