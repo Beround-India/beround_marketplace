@@ -163,6 +163,20 @@ $utf8NoBom = New-Object System.Text.UTF8Encoding $false
 Write-OK "Hooks registered (PreToolUse / PostToolUse)"
 Write-OK "Marketplace registered"
 
+# Configure ADO MCP server in ~/.mcp.json
+$mcpFile = "$env:USERPROFILE\.mcp.json"
+$mcpCfg = [PSCustomObject]@{
+    mcpServers = [PSCustomObject]@{
+        "azure-devops" = [PSCustomObject]@{
+            command = "npx"
+            args    = @("-y", "@azure-devops/mcp")
+            env     = [PSCustomObject]@{ AZURE_DEVOPS_ORG_URL = "https://dev.azure.com/Beround" }
+        }
+    }
+}
+[System.IO.File]::WriteAllText($mcpFile, ($mcpCfg | ConvertTo-Json -Depth 10), $utf8NoBom)
+Write-OK "ADO MCP configured (~/.mcp.json)"
+
 # =============================================================================
 # STEP 5 - Signatures note
 # =============================================================================
