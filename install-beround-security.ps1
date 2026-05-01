@@ -171,8 +171,7 @@ $mcpCfg = [PSCustomObject]@{
     mcpServers = [PSCustomObject]@{
         "azure-devops" = [PSCustomObject]@{
             command = "npx"
-            args    = @("-y", "@azure-devops/mcp")
-            env     = [PSCustomObject]@{ AZURE_DEVOPS_ORG_URL = "https://dev.azure.com/Beround" }
+            args    = @("-y", "@azure-devops/mcp", "Beround", "--authentication", "azcli")
         }
     }
 }
