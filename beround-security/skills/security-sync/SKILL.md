@@ -1,71 +1,70 @@
 # security-sync
 
 ## Purpose
-Pull the latest threat signatures from GitHub and update the local cache.
+Pull the latest threat signatures from Azure DevOps and update the local cache.
 
 ## Trigger
 `/security-sync`
 
 Also auto-triggered by security-scan if local signatures are older than 24 hours.
 
-## Script
+## ADO Details
+- Organization: Beround
+- Project: Agentic Engineering Security Scanner
+- Repository: Agentic Engineering Security Signatures
+- Branch: main
+- No PAT required - access via @azure-devops/mcp (pre-configured for all Beround users)
 
-```bash
-#!/usr/bin/env bash
-set -euo pipefail
+## Steps
 
-# Load PAT from config (Windows-safe path handling)
-GITHUB_PAT=$(python3 -c "import json,os; p=os.environ.get('USERPROFILE',os.path.expanduser('~')).replace(chr(92),'/'); print(json.load(open(p+'/.claude/plugins/beround-security/config/github.json'))['pat'])")
-GITHUB_BASE="https://raw.githubusercontent.com/Beround-India/beround_security/main/claude-security-signatures"
-SIG_DIR="${BEROUND_SIGNATURES_DIR:-$HOME/.claude/beround-security/signatures}"
+1. Use the ADO MCP to fetch `version.json` from the repo root
+2. Compare with local version at SIG_DIR/version.json
+3. If versions match: print "BEROUND SECURITY [SYNC]: Signatures are up to date (vX.X.X)." and stop
+4. If different or missing locally: fetch all 4 signature files via ADO MCP:
+   - signatures/threat-model.json
+   - signatures/package-denylist.json
+   - signatures/mcp-allowed-domains.json
+   - signatures/package-policy.json
+5. Validate each file is valid JSON
+6. Write all files + version.json to SIG_DIR
+7. Print "BEROUND SECURITY [SYNC]: Signatures updated to vX.X.X."
 
-mkdir -p "$SIG_DIR"
+## SIG_DIR path
 
-# Fetch remote version.json
-REMOTE_VERSION_JSON=$(curl -sf -H "Authorization: token $GITHUB_PAT" "$GITHUB_BASE/version.json" || true)
-if [ -z "$REMOTE_VERSION_JSON" ]; then
-  echo "BEROUND SECURITY [SYNC]: WARNING — could not reach GitHub. Using cached signatures." >&2
-  exit 0
-fi
-
-REMOTE_VER=$(echo "$REMOTE_VERSION_JSON" | python3 -c "import sys,json; print(json.load(sys.stdin)['version'])")
-
-# Compare with local version
-LOCAL_VERSION_FILE="$SIG_DIR/version.json"
-if [ -f "$LOCAL_VERSION_FILE" ]; then
-  LOCAL_VER=$(python3 -c "import json; print(json.load(open('$LOCAL_VERSION_FILE'))['version'])")
-  if [ "$LOCAL_VER" = "$REMOTE_VER" ]; then
-    echo "BEROUND SECURITY [SYNC]: Signatures are up to date (v$REMOTE_VER)."
-    exit 0
-  fi
-fi
-
-# Download all 4 signature files
-FILES=(
-  "signatures/threat-model.json"
-  "signatures/package-denylist.json"
-  "signatures/mcp-allowed-domains.json"
-  "signatures/package-policy.json"
-)
-
-for FILE in "${FILES[@]}"; do
-  FILENAME=$(basename "$FILE")
-  CONTENT=$(curl -sf -H "Authorization: token $GITHUB_PAT" "$GITHUB_BASE/$FILE" || true)
-  if [ -z "$CONTENT" ]; then
-    echo "BEROUND SECURITY [SYNC]: ERROR — failed to fetch $FILENAME. Aborting." >&2
-    exit 1
-  fi
-  echo "$CONTENT" | python3 -c "import sys,json; json.load(sys.stdin)" 2>/dev/null || {
-    echo "BEROUND SECURITY [SYNC]: ERROR — $FILENAME is not valid JSON. Aborting." >&2
-    exit 1
-  }
-  echo "$CONTENT" > "$SIG_DIR/$FILENAME"
-done
-
-echo "$REMOTE_VERSION_JSON" > "$LOCAL_VERSION_FILE"
-echo "BEROUND SECURITY [SYNC]: Signatures updated to v$REMOTE_VER."
+```python
+import os, pathlib
+if os.name == 'nt':
+    SIG_DIR = pathlib.Path(os.environ["USERPROFILE"]) / ".claude" / "beround-security" / "signatures"
+else:
+    SIG_DIR = pathlib.Path.home() / ".claude" / "beround-security" / "signatures"
+SIG_DIR.mkdir(parents=True, exist_ok=True)
 ```
 
-## Switching to ADO later
-Set `remote_type` to `"ado"` in `settings-template.json`.
-The skill will then use `@azure-devops/mcp` instead of curl.
+## ADO MCP usage
+
+Use the available ADO MCP tools (mcp__azure_devops or @azure-devops/mcp) to read files.
+Parameters for each file fetch:
+- organization: "Beround"
+- project: "Agentic Engineering Security Scanner"
+- repository: "Agentic Engineering Security Signatures"
+- branch/ref: "main"
+- path: "/version.json" (or "/signatures/threat-model.json" etc.)
+
+Write each file's content to SIG_DIR using Python:
+
+```python
+import json, pathlib
+
+# After fetching content via MCP, write to disk:
+(SIG_DIR / "version.json").write_text(version_content, encoding="utf-8")
+(SIG_DIR / "threat-model.json").write_text(threat_model_content, encoding="utf-8")
+(SIG_DIR / "package-denylist.json").write_text(denylist_content, encoding="utf-8")
+(SIG_DIR / "mcp-allowed-domains.json").write_text(domains_content, encoding="utf-8")
+(SIG_DIR / "package-policy.json").write_text(policy_content, encoding="utf-8")
+
+version = json.loads(version_content)["version"]
+print(f"BEROUND SECURITY [SYNC]: Signatures updated to v{version}.")
+```
+
+## Switching back to GitHub
+If ADO MCP is unavailable, set remote_type to "github" in settings and provide a PAT in config/github.json.

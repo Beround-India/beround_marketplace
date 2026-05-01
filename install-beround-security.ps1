@@ -16,7 +16,6 @@ $CLAUDE_DIR      = "$env:USERPROFILE\.claude"
 $PLUGIN_DIR      = "$CLAUDE_DIR\plugins\$PLUGIN_NAME"
 $CMD_DIR         = "$CLAUDE_DIR\commands"
 $SETTINGS        = "$CLAUDE_DIR\settings.json"
-$SIG_DIR         = "$CLAUDE_DIR\beround-security\signatures"
 
 function Write-Step($n, $msg) { Write-Host "`n[$n] $msg" -ForegroundColor Cyan }
 function Write-OK($msg)        { Write-Host "    [OK]   $msg" -ForegroundColor Green }
@@ -165,37 +164,11 @@ Write-OK "Hooks registered (PreToolUse / PostToolUse)"
 Write-OK "Marketplace registered"
 
 # =============================================================================
-# STEP 5 - First signature sync
+# STEP 5 - Signatures note
 # =============================================================================
-Write-Step "5/5" "Syncing threat signatures..."
-
-try {
-    $ghCfg   = Get-Content "$PLUGIN_DIR\config\github.json" -Raw | ConvertFrom-Json
-    $pat     = $ghCfg.pat
-    $base    = "https://raw.githubusercontent.com/Beround-India/beround_security/main/claude-security-signatures"
-    $headers = @{ Authorization = "token $pat" }
-
-    New-Item -ItemType Directory -Force -Path $SIG_DIR | Out-Null
-
-    $files = @(
-        "version.json",
-        "signatures/threat-model.json",
-        "signatures/package-denylist.json",
-        "signatures/mcp-allowed-domains.json",
-        "signatures/package-policy.json"
-    )
-    foreach ($f in $files) {
-        $resp = Invoke-WebRequest -Uri "$base/$f" -Headers $headers -UseBasicParsing -ErrorAction Stop
-        $dest = "$SIG_DIR\$(Split-Path $f -Leaf)"
-        [System.IO.File]::WriteAllBytes($dest, $resp.Content)
-    }
-
-    $version = (Get-Content "$SIG_DIR\version.json" -Raw | ConvertFrom-Json).version
-    Write-OK "Signatures synced to v$version"
-} catch {
-    Write-Warn "Could not sync signatures: $_"
-    Write-Warn "Run /security-sync manually after restarting Claude Code."
-}
+Write-Step "5/5" "Threat signatures..."
+Write-OK "Signatures sync via ADO MCP - no PAT required"
+Write-OK "Run /security-sync in Claude Code after restart to pull latest signatures"
 
 # =============================================================================
 # DONE
